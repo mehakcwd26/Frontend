@@ -1,0 +1,755 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReuseLoop | Reuse. Share. Sustain.</title>
+<style>
+:root{
+  --green:#16845b;
+  --dark:#123c2c;
+  --mint:#e8f7ed;
+  --cream:#f8faf6;
+  --muted:#65766e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Arial,sans-serif;
+  color:#263b30;background:var(--cream)
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{
+  position:sticky;top:0;z-index:20;
+  background:#fff;box-shadow:0 3px 15px #0000000b;
+  padding:16px 6%;display:flex;
+  justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:15px
+}
+.logo{font-size:27px;font-weight:800;color:var(--green)}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{color:var(--dark);text-decoration:none;font-weight:600}
+nav a:hover{color:var(--green)}
+.auth-bar{
+  display:flex;align-items:center;justify-content:center;
+  gap:12px;flex-wrap:wrap;padding:12px;
+  background:#e8f7ed
+}
+.btn{
+  padding:12px 22px;border:0;border-radius:10px;
+  background:var(--green);color:#fff;font-weight:700;
+  display:inline-block;text-decoration:none
+}
+.btn:hover{background:#106544}
+.btn-outline{
+  background:#fff;color:var(--green);
+  border:1px solid var(--green)
+}
+.btn-outline:hover{background:#e4f5eb}
+.hero{
+  padding:80px 7%;
+  background:linear-gradient(120deg,#e1f7e9,#fafff9);
+  display:grid;grid-template-columns:1.2fr 1fr;
+  align-items:center;gap:35px
+}
+.pill{
+  display:inline-block;background:#d1f2df;color:#11623f;
+  padding:9px 17px;border-radius:30px;font-weight:700
+}
+.hero h1{
+  font-size:clamp(36px,5vw,60px);
+  color:var(--dark);line-height:1.15;margin:22px 0
+}
+.hero h1 span{color:var(--green)}
+.hero p{font-size:18px;color:var(--muted);max-width:520px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.hero-card{
+  background:#fff;border-radius:25px;padding:40px 20px;
+  box-shadow:0 20px 50px #135c3020;text-align:center
+}
+.hero-icons{font-size:65px;line-height:1.8}
+.hero-card h2{color:var(--green)}
+section{padding:65px 7%}
+.title{text-align:center;color:var(--dark);font-size:34px}
+.subtitle{text-align:center;color:var(--muted);margin-bottom:32px}
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;padding:30px 7%
+}
+.stat{
+  background:#fff;border-radius:15px;
+  text-align:center;padding:22px;
+  border:1px solid #e3ebe6
+}
+.stat h2{font-size:32px;color:var(--green);margin:0}
+.filters{
+  display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px
+}
+input,select,textarea{
+  width:100%;padding:13px;border:1px solid #d8e5dc;
+  border-radius:10px;background:#fff;outline:none
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--green)
+}
+.filters input{flex:2;min-width:200px}
+.filters select{flex:1;min-width:140px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:22px
+}
+.card{
+  background:#fff;border-radius:17px;overflow:hidden;
+  box-shadow:0 5px 25px #0000000b;
+  transition:transform .2s
+}
+.card:hover{transform:translateY(-5px)}
+.item-image{
+  height:185px;background:var(--mint);
+  display:flex;align-items:center;justify-content:center;
+  font-size:70px
+}
+.item-image img{width:100%;height:100%;object-fit:cover}
+.card-body{padding:20px}
+.card h3{color:var(--dark);margin:12px 0}
+.card p{font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.tag{
+  background:#dcfce7;color:#166534;
+  border-radius:30px;padding:6px 12px;
+  font-size:12px;font-weight:bold
+}
+.card .btn{width:100%;margin-top:12px}
+.form-box{
+  max-width:720px;margin:auto;background:#fff;
+  padding:30px;border-radius:20px;
+  box-shadow:0 5px 30px #0000000a
+}
+.form-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:18px
+}
+.field{margin-bottom:18px}
+.field label{display:block;font-weight:700;margin-bottom:7px}
+textarea{min-height:105px;resize:vertical}
+.full{width:100%}
+.notice{
+  background:#e9f7ed;color:#145c39;
+  border-radius:10px;padding:13px;margin-bottom:20px
+}
+.steps{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px
+}
+.step{
+  text-align:center;background:#fff;padding:30px;
+  border-radius:17px
+}
+.step-icon{font-size:45px}
+.step h3{color:var(--dark)}
+.empty{text-align:center;color:var(--muted);padding:30px;grid-column:1/-1}
+footer{
+  background:var(--dark);color:#fff;
+  text-align:center;padding:40px 15px
+}
+footer p{color:#c7ded1}
+.modal{
+  position:fixed;inset:0;z-index:100;
+  background:#071d14aa;display:flex;
+  align-items:center;justify-content:center;padding:20px
+}
+.modal.hidden,.hidden{display:none!important}
+.modal-box{
+  background:#fff;width:100%;max-width:430px;
+  border-radius:20px;padding:30px;
+  max-height:90vh;overflow:auto;position:relative
+}
+.close{
+  position:absolute;right:17px;top:12px;
+  background:none;border:0;font-size:28px;color:#555
+}
+.modal-box h2{text-align:center;color:var(--dark)}
+.modal-box p{text-align:center;color:var(--muted)}
+.switch{text-align:center;margin-top:18px}
+.switch button{
+  background:none;border:0;color:var(--green);font-weight:700
+}
+#toast{
+  position:fixed;bottom:22px;right:22px;z-index:200;
+  background:var(--dark);color:#fff;
+  padding:15px 20px;border-radius:12px;
+  max-width:330px;box-shadow:0 6px 20px #0003
+}
+@media(max-width:760px){
+  header{justify-content:center}
+  nav{justify-content:center}
+  .hero{grid-template-columns:1fr;padding:55px 6%}
+  .stats,.steps,.form-grid{grid-template-columns:1fr}
+  section{padding:45px 5%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">♻ ReuseLoop</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#marketplace">Marketplace</a>
+    <a href="#add-item">Add Item</a>
+    <a href="#my-listings">My Listings</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<!-- LOGIN AND SIGN UP BELOW HEADER -->
+<div class="auth-bar">
+  <span id="welcomeText">Join the ReuseLoop community</span>
+  <button class="btn btn-outline" id="loginBtn">Login</button>
+  <button class="btn" id="signupBtn">Sign Up</button>
+  <button class="btn hidden" id="logoutBtn">Logout</button>
+</div>
+
+<!-- HOME -->
+<div class="hero" id="home">
+  <div>
+    <span class="pill">🌱 A Smarter Way to Reuse</span>
+    <h1>Give Your Items<br><span>A Second Life.</span></h1>
+    <p>
+      Don't throw away what someone else needs.
+      Donate, exchange, borrow or sell useful items
+      within your college community.
+    </p>
+    <div class="hero-actions">
+      <a class="btn" href="#marketplace">Explore Marketplace</a>
+      <a class="btn btn-outline" href="#add-item">+ List an Item</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="hero-icons">📚 ♻️ 💻<br>👕 📦 🌱</div>
+    <h2>Reuse More. Waste Less.</h2>
+    <p>Small actions create a greener campus.</p>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><h2 id="totalItems">0</h2><p>Available Items</p></div>
+  <div class="stat"><h2 id="donations">0</h2><p>Donation Listings</p></div>
+  <div class="stat"><h2>4</h2><p>Ways to Reuse</p></div>
+</div>
+
+<!-- MARKETPLACE -->
+<section id="marketplace">
+  <h2 class="title">Explore Marketplace</h2>
+  <p class="subtitle">Discover useful items at affordable prices or for free.</p>
+  <div class="filters">
+    <input id="search" type="search" placeholder="🔍 Search reusable items...">
+    <select id="categoryFilter">
+      <option value="All">All Categories</option>
+      <option>Books</option><option>Clothes</option>
+      <option>Electronics</option><option>Stationery</option>
+      <option>Other</option>
+    </select>
+    <select id="typeFilter">
+      <option value="All">All Types</option>
+      <option>Donate</option><option>Exchange</option>
+      <option>Borrow</option><option>Sell</option>
+    </select>
+  </div>
+  <div class="grid" id="itemGrid"></div>
+</section>
+
+<!-- ADD ITEM -->
+<section id="add-item" style="background:#eaf7ee">
+  <h2 class="title">Share Something Useful</h2>
+  <p class="subtitle">Your unused item could help another student.</p>
+  <div class="form-box">
+    <div class="notice">
+      Demo mode: Listings are stored in this browser only.
+      Do not enter sensitive personal information.
+    </div>
+    <form id="itemForm">
+      <div class="form-grid">
+        <div class="field">
+          <label>Item Name *</label>
+          <input id="itemName" required maxlength="80"
+                 placeholder="Engineering textbook">
+        </div>
+        <div class="field">
+          <label>Category *</label>
+          <select id="itemCategory" required>
+            <option value="">Choose Category</option>
+            <option>Books</option><option>Clothes</option>
+            <option>Electronics</option><option>Stationery</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Listing Type *</label>
+          <select id="itemType" required>
+            <option value="">Choose Type</option>
+            <option>Donate</option><option>Exchange</option>
+            <option>Borrow</option><option>Sell</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Price (₹)</label>
+          <input id="itemPrice" type="number" min="0"
+                 max="1000000" value="0">
+        </div>
+      </div>
+      <div class="field">
+        <label>Description *</label>
+        <textarea id="itemDescription" required maxlength="500"
+          placeholder="Describe your item's condition..."></textarea>
+      </div>
+      <div class="field">
+        <label>Item Photo (Optional)</label>
+        <input id="itemPhoto" type="file"
+               accept="image/jpeg,image/png,image/webp">
+        <small>JPG, PNG or WebP, maximum 1 MB.</small>
+      </div>
+      <button class="btn full" type="submit">Publish Listing</button>
+    </form>
+  </div>
+</section>
+
+<!-- MY LISTINGS -->
+<section id="my-listings">
+  <h2 class="title">My Listings</h2>
+  <p class="subtitle">Manage items you've added in this browser.</p>
+  <div class="grid" id="myGrid"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background:#eaf7ee">
+  <h2 class="title">How ReuseLoop Works</h2>
+  <p class="subtitle">Three simple steps toward a sustainable campus.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-icon">📦</div>
+      <h3>1. List Your Item</h3>
+      <p>Share books, clothes, electronics and other useful items.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">🔎</div>
+      <h3>2. Find What You Need</h3>
+      <p>Search available items by category and listing type.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">🤝</div>
+      <h3>3. Connect & Reuse</h3>
+      <p>Contact the owner and arrange a safe campus exchange.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <h2>♻ ReuseLoop</h2>
+  <p>Reduce Waste • Save Money • Build Community</p>
+  <p>Ideathon Project | Team Innovexa</p>
+</footer>
+
+<!-- LOGIN / SIGN UP POPUP -->
+<div class="modal hidden" id="authModal" role="dialog"
+     aria-modal="true" aria-labelledby="authTitle">
+  <div class="modal-box">
+    <button class="close" id="closeModal" aria-label="Close">×</button>
+    <h2 id="authTitle">Welcome Back</h2>
+    <p id="authSubtitle">Sign in to explore ReuseLoop</p>
+    <form id="authForm">
+      <div class="field hidden" id="nameField">
+        <label for="authName">Full Name</label>
+        <input id="authName" maxlength="60" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="authEmail">Email</label>
+        <input id="authEmail" type="email" required
+               autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="authPassword">Password</label>
+        <input id="authPassword" type="password" required
+               minlength="6" autocomplete="current-password">
+      </div>
+      <button class="btn full" id="authSubmit" type="submit">
+        Login
+      </button>
+    </form>
+    <div class="switch">
+      <span id="switchText">New to ReuseLoop?</span>
+      <button id="switchMode">Create Account</button>
+    </div>
+    <p style="font-size:12px">
+      Prototype only. This is not real authentication.
+      Use a fictional email and password for testing.
+    </p>
+  </div>
+</div>
+
+<div id="toast" class="hidden" role="status"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const STORE = "reuseLoopAttractiveV1";
+const USER_STORE = "reuseLoopDemoUserV1";
+const OWN_STORE = "reuseLoopOwnedV1";
+
+const icons = {
+  Books:"📚",Clothes:"👕",Electronics:"💻",
+  Stationery:"✏️",Other:"📦"
+};
+
+const demos = [
+  {id:"d1",name:"Engineering Mathematics Book",
+   category:"Books",type:"Donate",price:0,
+   description:"Pre-loved textbook in good condition.",
+   owner:"Demo Student",email:"",image:"",demo:true},
+  {id:"d2",name:"Scientific Calculator",
+   category:"Electronics",type:"Exchange",price:0,
+   description:"Working scientific calculator.",
+   owner:"Demo Student",email:"",image:"",demo:true},
+  {id:"d3",name:"College Backpack",
+   category:"Other",type:"Sell",price:250,
+   description:"Reusable backpack in good condition.",
+   owner:"Demo Student",email:"",image:"",demo:true},
+  {id:"d4",name:"Winter Jacket",
+   category:"Clothes",type:"Donate",price:0,
+   description:"Clean jacket ready for reuse.",
+   owner:"Demo Student",email:"",image:"",demo:true},
+  {id:"d5",name:"Drawing Instruments",
+   category:"Stationery",type:"Borrow",price:0,
+   description:"Drawing tools for engineering classes.",
+   owner:"Demo Student",email:"",image:"",demo:true}
+];
+
+function readArray(key,fallback){
+  try{
+    const value=JSON.parse(localStorage.getItem(key));
+    return Array.isArray(value)?value:fallback;
+  }catch{return fallback}
+}
+
+let items=readArray(STORE,demos);
+let owned=readArray(OWN_STORE,[]);
+let user=null;
+let mode="login";
+
+try{
+  user=JSON.parse(sessionStorage.getItem(USER_STORE));
+}catch{}
+
+function toast(message){
+  $("toast").textContent=message;
+  $("toast").classList.remove("hidden");
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(
+    ()=>$("toast").classList.add("hidden"),3500
+  );
+}
+
+function save(){
+  localStorage.setItem(STORE,JSON.stringify(items));
+  localStorage.setItem(OWN_STORE,JSON.stringify(owned));
+}
+
+function make(tag,text,cls=""){
+  const el=document.createElement(tag);
+  el.textContent=text;
+  if(cls)el.className=cls;
+  return el;
+}
+
+function updateAuth(){
+  $("loginBtn").classList.toggle("hidden",!!user);
+  $("signupBtn").classList.toggle("hidden",!!user);
+  $("logoutBtn").classList.toggle("hidden",!user);
+  $("welcomeText").textContent=user
+    ?"Hello, "+user.name+" 👋"
+    :"Join the ReuseLoop community";
+}
+
+function openAuth(nextMode){
+  mode=nextMode;
+  const signup=mode==="signup";
+  $("authTitle").textContent=signup
+    ?"Join ReuseLoop":"Welcome Back";
+  $("authSubtitle").textContent=signup
+    ?"Create your demo profile":"Enter your demo profile";
+  $("nameField").classList.toggle("hidden",!signup);
+  $("authName").required=signup;
+  $("authSubmit").textContent=signup?"Sign Up":"Login";
+  $("switchText").textContent=signup
+    ?"Already have an account?":"New to ReuseLoop?";
+  $("switchMode").textContent=signup
+    ?"Login":"Create Account";
+  $("authPassword").autocomplete=signup
+    ?"new-password":"current-password";
+  $("authForm").reset();
+  $("authModal").classList.remove("hidden");
+  $("authEmail").focus();
+}
+
+function closeAuth(){
+  $("authModal").classList.add("hidden");
+}
+
+$("loginBtn").onclick=()=>openAuth("login");
+$("signupBtn").onclick=()=>openAuth("signup");
+$("closeModal").onclick=closeAuth;
+$("switchMode").onclick=()=>openAuth(
+  mode==="login"?"signup":"login"
+);
+
+$("authModal").addEventListener("click",e=>{
+  if(e.target===$("authModal"))closeAuth();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")closeAuth();
+});
+
+$("authForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const email=$("authEmail").value.trim().toLowerCase();
+  const name=$("authName").value.trim();
+  const password=$("authPassword").value;
+
+  if(password.length<6){
+    toast("Enter at least 6 characters.");
+    return;
+  }
+
+  // Demo-only login: no password is saved or verified.
+  // A real login requires Firebase Authentication.
+  user={
+    name:mode==="signup"
+      ?name
+      :email.split("@")[0],
+    email
+  };
+
+  sessionStorage.setItem(USER_STORE,JSON.stringify(user));
+  updateAuth();
+  closeAuth();
+  render();
+  toast("Demo profile active!");
+});
+
+$("logoutBtn").onclick=()=>{
+  user=null;
+  sessionStorage.removeItem(USER_STORE);
+  updateAuth();
+  render();
+  toast("Logged out of demo profile.");
+};
+
+function card(item,mine=false){
+  const el=make("article","","card");
+  const image=make("div","","item-image");
+
+  if(item.image){
+    const img=document.createElement("img");
+    img.src=item.image;
+    img.alt=item.name;
+    image.append(img);
+  }else{
+    image.textContent=icons[item.category]||"📦";
+  }
+
+  const body=make("div","","card-body");
+  const tag=make("span",item.type,"tag");
+  const title=make("h3",item.name);
+  const description=make("p",item.description);
+  const owner=make("p","Owner: "+item.owner);
+  const price=make("p",item.type==="Sell"
+    ?"Price: ₹"+item.price
+    :item.type==="Donate"?"Free Donation":item.type);
+
+  const button=make(
+    "button",mine?"Remove Listing":"Contact Owner","btn"
+  );
+
+  button.onclick=()=>{
+    if(mine){
+      if(!confirm("Remove this item?"))return;
+      items=items.filter(x=>x.id!==item.id);
+      owned=owned.filter(x=>x!==item.id);
+      save();
+      render();
+      toast("Listing removed.");
+      return;
+    }
+
+    if(!user){
+      toast("Please login first.");
+      openAuth("login");
+      return;
+    }
+
+    if(item.demo||!item.email){
+      toast("This is a sample item for the demo.");
+      return;
+    }
+
+    const subject=encodeURIComponent(
+      "ReuseLoop: "+item.name
+    );
+    const bodyText=encodeURIComponent(
+      "Hello "+item.owner+
+      ",\n\nI'm interested in your ReuseLoop item: "+
+      item.name+". Is it available?\n\nThank you."
+    );
+
+    window.location.href=
+      "mailto:"+item.email+
+      "?subject="+subject+"&body="+bodyText;
+  };
+
+  body.append(tag,title,description,owner,price,button);
+  el.append(image,body);
+  return el;
+}
+
+function render(){
+  const search=$("search").value.toLowerCase().trim();
+  const category=$("categoryFilter").value;
+  const type=$("typeFilter").value;
+
+  const filtered=items.filter(item=>
+    (item.name+" "+item.description)
+      .toLowerCase().includes(search) &&
+    (category==="All"||item.category===category) &&
+    (type==="All"||item.type===type)
+  );
+
+  $("itemGrid").replaceChildren();
+
+  if(!filtered.length){
+    $("itemGrid").append(
+      make("p","No matching items found.","empty")
+    );
+  }else{
+    filtered.forEach(item=>$("itemGrid").append(card(item)));
+  }
+
+  $("myGrid").replaceChildren();
+  const mine=user
+    ?items.filter(item=>owned.includes(item.id)
+      &&item.email===user.email)
+    :[];
+
+  if(!mine.length){
+    $("myGrid").append(make(
+      "p",
+      user?"No listings yet. Add your first item!"
+          :"Login to view your demo listings.",
+      "empty"
+    ));
+  }else{
+    mine.forEach(item=>$("myGrid").append(card(item,true)));
+  }
+
+  $("totalItems").textContent=items.length;
+  $("donations").textContent=
+    items.filter(item=>item.type==="Donate").length;
+}
+
+function readPhoto(file){
+  return new Promise((resolve,reject)=>{
+    if(!file)return resolve("");
+
+    if(!["image/jpeg","image/png","image/webp"]
+        .includes(file.type)){
+      return reject(Error("Choose a JPG, PNG or WebP image."));
+    }
+
+    if(file.size>1024*1024){
+      return reject(Error("Image must be under 1 MB."));
+    }
+
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(Error("Image reading failed."));
+    reader.readAsDataURL(file);
+  });
+}
+
+$("itemForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+
+  if(!user){
+    toast("Please login to publish an item.");
+    openAuth("login");
+    return;
+  }
+
+  const name=$("itemName").value.trim();
+  const category=$("itemCategory").value;
+  const type=$("itemType").value;
+  const price=Number($("itemPrice").value);
+  const description=$("itemDescription").value.trim();
+
+  if(!name||!category||!type||!description){
+    toast("Complete all required fields.");
+    return;
+  }
+
+  if(!Number.isFinite(price)||price<0||price>1000000){
+    toast("Enter a valid price.");
+    return;
+  }
+
+  if(type==="Sell"&&price===0){
+    toast("Enter a price for selling.");
+    return;
+  }
+
+  let image="";
+  try{
+    image=await readPhoto($("itemPhoto").files[0]);
+  }catch(error){
+    toast(error.message);
+    return;
+  }
+
+  const id=crypto.randomUUID
+    ?crypto.randomUUID()
+    :String(Date.now())+Math.random();
+
+  const item={
+    id,name,category,type,
+    price:type==="Sell"?price:0,
+    description,image,
+    owner:user.name,email:user.email,demo:false
+  };
+
+  items.unshift(item);
+  owned.push(id);
+
+  try{
+    save();
+  }catch{
+    items.shift();
+    owned.pop();
+    toast("Storage full. Try a smaller image.");
+    return;
+  }
+
+  $("itemForm").reset();
+  render();
+  toast("Your item was published!");
+  $("marketplace").scrollIntoView({behavior:"smooth"});
+});
+
+["search","categoryFilter","typeFilter"].forEach(id=>{
+  $(id).addEventListener(
+    id==="search"?"input":"change",render
+  );
+});
+
+updateAuth();
+render();
+</script>
+</body>
+</html>
